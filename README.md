@@ -6,6 +6,8 @@ This project is your gateway to building a visually appealing and highly functio
 
 With its emphasis on speed, responsiveness, and customization, the Astro Portfolio enables you to create a unique online presence that reflects your personal brand. Dive into the features and setup instructions below to start crafting your ideal portfolio!
 
+![image](https://github.com/user-attachments/assets/20823fe0-051f-40d6-9e10-6b9d1de1acc1)
+
 ## 🌟 Features
 
 The Astro Portfolio template comes with a variety of features that make it an excellent choice for showcasing your work:
