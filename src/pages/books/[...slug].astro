@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+import MDXLayout from "../../layouts/MDXLayout.astro";
+
+/**
+ * This is the dynamic route for projects
+ **/
+export async function getStaticPaths() {
+  const booksEntries = await getCollection("books");
+  return booksEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// Define the structure of the entry object
+interface Entry {
+  data: {
+    author?: string;
+    readYear?: number;
+    [key: string]: any;
+  };
+  render: () => Promise<{ Content: any }>;
+}
+
+const { entry } = Astro.props as { entry: Entry }; // Type assertion
+const { author, readYear } = entry.data;
+const { Content } = await entry.render();
+---
+
+<MDXLayout frontmatter={entry.data}>
+  {
+    author && (
+      <div class="text-sm font-light text-center">Book Author: {author}</div>
+    )
+  }
+  {
+    readYear && (
+      <div class="text-sm font-light text-center">Read Year: {readYear}</div>
+    )
+  }
+  <Content />
+</MDXLayout>

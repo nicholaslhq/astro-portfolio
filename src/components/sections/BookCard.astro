@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import { Button } from "../ui/button";
+
+let books = await getCollection("books");
+
+// Sort books by read year in descending order and take the latest three
+books = books.sort((a, b) => b.data.readYear - a.data.readYear).slice(0, 3);
+---
+
+<div class="mt-2 space-y-4">
+  <p class="text-sm font-light my-1">
+    Here are some of the titles I’ve explored and delved into.
+  </p>
+  {
+    books.map((book) => (
+      <div>
+        <h3 class="text-md font-semibold text-primary">
+          <a href={`/books/${book.slug}`} class="hover:underline">
+            {book.data.title}
+          </a>
+        </h3>
+        <p class="text-sm">{book.data.author}</p>
+      </div>
+    ))
+  }
+  <a href="/books">
+    <Button variant="link" className="pl-0"> View More</Button>
+  </a>
+</div>

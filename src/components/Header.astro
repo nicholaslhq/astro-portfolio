@@ -1,0 +1,83 @@
+---
+import { buttonVariants } from "../components/ui/button";
+import { ModeToggle } from "../components/react/ThemeToggle";
+import { PROFILE } from "../content/profileData";
+
+const SITE = PROFILE.site;
+---
+
+<header
+  class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+>
+  <div
+    class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
+  >
+    <div class="flex">
+      <a href="/" class="flex items-center space-x-2">
+        <img
+          src={PROFILE.faviconUrl}
+          class="pointer-events-none max-h-[30px] w-auto select-none bottom-auto right-auto z-auto opacity-100"
+          width="100%"
+          height="auto"
+          alt={`Image of ${PROFILE.profileName}`}
+        />
+        <span class="hidden md:inline-block font-bold"
+          >{PROFILE.profileName}</span
+        >
+      </a>
+    </div>
+    <div class="flex flex-1 items-center justify-end space-x-4">
+      <nav class="flex items-center space-x-1">
+        <a
+          href="/posts"
+          class={`${buttonVariants({ variant: "ghost" })} hidden sm:inline-flex`}
+        >
+          Blogs
+        </a>
+        <a
+          href="/books"
+          class={`${buttonVariants({ variant: "ghost" })} hidden sm:inline-flex`}
+        >
+          Books
+        </a>
+        <a
+          href="/experiences"
+          class={`${buttonVariants({ variant: "ghost" })} hidden sm:inline-flex`}
+        >
+          Experiences
+        </a>
+        <a
+          href="/projects"
+          class={`${buttonVariants({ variant: "ghost" })} hidden sm:inline-flex`}
+        >
+          Projects
+        </a>
+        <a href="/tags" class={buttonVariants({ variant: "ghost" })}> Tags </a>
+        <a
+          href={PROFILE.links.github}
+          target="_blank"
+          rel="noreferrer"
+          class={buttonVariants({ variant: "ghost" })}
+        >
+          GitHub
+        </a>
+
+        <ModeToggle transition:persist client:load />
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  document.addEventListener("astro:after-swap", function () {
+    if (localStorage.getItem("theme") === "dark")
+      document.documentElement.classList.toggle("dark", true);
+  });
+
+  const getThemePreference = () => {
+    return localStorage.getItem("theme");
+  };
+
+  const isDark = getThemePreference() === "dark";
+  document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+</script>

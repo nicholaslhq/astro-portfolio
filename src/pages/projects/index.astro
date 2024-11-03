@@ -1,0 +1,37 @@
+---
+import ProjectCard from "../../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+import IndexPageLayout from "../../layouts/IndexPageLayout.astro";
+import { PROFILE } from "../../content/profileData";
+
+// read mdx files from projects folder as entities
+let projects = await getCollection("projects");
+
+// Sort projects by start date in descending order
+projects = projects.sort(
+  (a, b) =>
+    new Date(b.data.startDate).getTime() - new Date(a.data.startDate).getTime()
+);
+---
+
+<IndexPageLayout
+  title="Projects"
+  description="Projects I have worked on recently"
+  subTitle="My Projects"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    {
+      projects.map((entity: any) => (
+        <ProjectCard
+          key={entity.data.title}
+          href={"/projects/" + entity.slug}
+          heading={entity.data.title}
+          subheading={entity.data.description}
+          imagePath={entity?.data?.image.url || PROFILE.defaultImageUrl}
+          altText={entity?.data?.image.alt || PROFILE.defaultImageAlt}
+          dateStart={entity.data.startDate}
+        />
+      ))
+    }
+  </div>
+</IndexPageLayout>

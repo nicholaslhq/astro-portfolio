@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import MDXLayout from "../../layouts/MDXLayout.astro";
+import { formateLocalDate } from "../../lib/utils";
+
+/**
+  This is the dynamic route for experiences
+ **/
+export async function getStaticPaths() {
+  const experienceEntries = await getCollection("experiences");
+  return experienceEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// Define the structure of the entry object
+interface Entry {
+  data: {
+    company?: string;
+    startDate?: any;
+    endDate?: any;
+    [key: string]: any;
+  };
+  render: () => Promise<{ Content: any }>;
+}
+
+const { entry } = Astro.props as { entry: Entry }; // Type assertion
+const { company, startDate, endDate } = entry.data;
+const { Content } = await entry.render();
+---
+
+<MDXLayout frontmatter={entry.data}>
+  {company && <div class="text-sm font-light text-center">{company}</div>}
+  {
+    startDate && (
+      <div class="text-sm font-light text-center">
+        {formateLocalDate(startDate)}{" "}
+        {endDate ? "- " + formateLocalDate(endDate) : "- Present"}
+      </div>
+    )
+  }
+  <Content />
+</MDXLayout>

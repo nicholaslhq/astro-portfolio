@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import { Button } from "../ui/button";
+import { formateLocalDate } from "../../lib/utils";
+
+let posts = await getCollection("posts");
+
+// Sort posts by start date in descending order and take the latest one
+posts = posts
+  .sort(
+    (a, b) =>
+      new Date(b.data.startDate).getTime() -
+      new Date(a.data.startDate).getTime()
+  )
+  .slice(0, 1);
+---
+
+<div class="mt-2 space-y-4">
+  {
+    posts.map((post) => (
+      <div>
+        <h3 class="text-md font-semibold text-primary">
+          <a href={`/posts/${post.slug}`} class="hover:underline line-clamp-2">
+            {post.data.title}
+          </a>
+        </h3>
+        <p class="text-sm line-clamp-2">{post.data.description}</p>
+        <p class="text-sm text-gray-600">
+          {formateLocalDate(post.data.startDate)}{" "}
+          {post.data?.endDate ? "- " + formateLocalDate(post.data.endDate) : ""}
+        </p>
+      </div>
+    ))
+  }
+  <a href="/posts">
+    <Button variant="link" className="pl-0"> View More</Button>
+  </a>
+</div>

@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import { Button } from "../ui/button";
+import { formateLocalDate } from "../../lib/utils";
+
+let projects = await getCollection("projects");
+
+// Sort projects by start date in descending order and take the latest three
+projects = projects
+  .sort(
+    (a, b) =>
+      new Date(b.data.startDate).getTime() -
+      new Date(a.data.startDate).getTime()
+  )
+  .slice(0, 3);
+---
+
+<div class="mt-2 space-y-4">
+  {
+    projects.slice(0, 3).map((project) => (
+      <div>
+        <h3 class="text-md font-semibold text-primary">
+          <a href={`/projects/${project.slug}`} class="hover:underline">
+            {project.data.title}
+          </a>
+        </h3>
+        <p class="text-sm">{project.data.description}</p>
+        <p class="text-sm text-gray-600">
+          {formateLocalDate(project.data.startDate)}{" "}
+          {project.data?.endDate
+            ? "- " + formateLocalDate(project.data.endDate)
+            : ""}
+        </p>
+      </div>
+    ))
+  }
+  <a href="/projects">
+    <Button variant="link" className="pl-0"> View More</Button>
+  </a>
+</div>

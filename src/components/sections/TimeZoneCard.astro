@@ -1,0 +1,8 @@
+---
+import NowTime from "../react/NowTime";
+const { timezone = null } = Astro.props;
+---
+
+<div class="p-1 flex flex-row items-center gap-2 min-h-[100px]">
+  <NowTime timezone={timezone} client:load />
+</div>

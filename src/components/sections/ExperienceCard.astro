@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import { Button } from "../ui/button";
+import { formateLocalDate } from "../../lib/utils";
+
+let experiences = await getCollection("experiences");
+
+// Sort experiences by start date in descending order and take the latest three
+experiences = experiences
+  .sort(
+    (a, b) =>
+      new Date(b.data.startDate).getTime() -
+      new Date(a.data.startDate).getTime()
+  )
+  .slice(0, 3);
+---
+
+<div class="mt-2 space-y-4">
+  {
+    experiences.slice(0, 3).map((exp) => (
+      <div>
+        <h3 class="text-md font-semibold text-primary">
+          <a href={`/experiences/${exp.slug}`} class="hover:underline">
+            {exp.data.title}
+          </a>
+        </h3>
+        <p class="text-sm">{exp.data.company}</p>
+        <p class="text-sm text-gray-600">
+          {formateLocalDate(exp.data.startDate)}{" "}
+          {exp.data?.endDate
+            ? "- " + formateLocalDate(exp.data.endDate)
+            : "- Present"}
+        </p>
+      </div>
+    ))
+  }
+  <a href="/experiences">
+    <Button variant="link" className="pl-0"> View More</Button>
+  </a>
+</div>

@@ -1,0 +1,20 @@
+---
+// src/components/sections/ContactForm.astro
+
+const { onSubmit } = Astro.props;
+import { PROFILE } from "../../content/profileData";
+import ContactDialog from "../react/ContactDialog";
+import { Button } from "../ui/button";
+---
+
+<div class="flex items-center text-sm">
+  <span>
+    Please feel free to reach out to me via <ContactDialog
+      triggerType="text"
+      client:load
+    />, or <a href={PROFILE.repoUrl + "/issues"} class="underline" target="_blank"
+      ><Button variant="link" className="p-0 h-4 text-md">Github Issue</Button
+      ></a
+    >.
+  </span>
+</div>
